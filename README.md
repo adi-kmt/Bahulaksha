@@ -57,7 +57,7 @@ Bunny is a family of lightweight but powerful multimodal models. It offers multi
 
   ```shell
   pip install --upgrade pip  # enable PEP 660 support
-  pip install transformers==4.36.2
+  pip3 install  torch==2.1.2 torchvision==0.16.2 --index-url https://download.pytorch.org/whl/cu118
   pip install torch torchvision xformers --index-url https://download.pytorch.org/whl/cu118
   ```
 

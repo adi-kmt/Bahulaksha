@@ -32,6 +32,7 @@ class ModelArguments:
 	vision_tower: Optional[str] = field(default=None)
 	pretrain_mm_mlp_adapter: Optional[str] = field(default=None)
 	mm_projector_type: Optional[str] = field(default='mlp2x_gelu')
+	max_sequence_length: Optional[int] = field(default=2048)
 
 
 @dataclass
@@ -338,6 +339,18 @@ def train():
 		device=training_args.device)
 
 	data_args.image_processor = vision_tower.image_processor
+	# TODO check if this is valid here.
+	# if cfg.is_qwen_derived_model:
+	# 	token_ids = ["bos_token_id", "eos_token_id", "pad_token_id",
+	# 				 "unk_token_id"]
+	# 	for attr_name in token_ids:
+	# 		if getattr(tokenizer, attr_name) is None:
+	# 			setattr(tokenizer, attr_name, tokenizer.eod_id)
+	#
+	# 	token_names = ["bos_token", "eos_token", "pad_token", "unk_token"]
+	# 	for attr_name in token_names:
+	# 		if getattr(tokenizer, attr_name) is None:
+	# 			setattr(tokenizer, attr_name, "<|endoftext|>")
 
 	model.config.image_aspect_ratio = data_args.image_aspect_ratio
 	model.config.tokenizer_padding_side = tokenizer.padding_side

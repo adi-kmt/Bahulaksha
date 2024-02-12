@@ -89,5 +89,5 @@ class BunnyQwenForCausalLM(Qwen2ForCausalLM, BunnyMetaForCausalLM):
 		return _inputs
 
 
-AutoConfig.register("bunny-phi", BunnyQwenConfig)
+AutoConfig.register("bunny-qwen", BunnyQwenConfig)
 AutoModelForCausalLM.register(BunnyQwenConfig, BunnyQwenForCausalLM)

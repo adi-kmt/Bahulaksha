@@ -22,8 +22,14 @@ class BunnyQwenModel(BunnyMetaModel, Qwen2Model):
 class BunnyQwenForCausalLM(Qwen2ForCausalLM, BunnyMetaForCausalLM):
 	config_class = BunnyQwenConfig
 
-	def __init__(self):
-		pass
+	def __init__(self, config):
+		self.model = BunnyQwenModel(config)
+		self.vocab_size = config.vocab_size
+		self.lm_head = torch.nn.Linear(config.hidden_size, config.vocab_size,
+									bias=False)
+
+		# Initialize weights and apply final processing
+		self.post_init()
 
 	def get_model(self):
 		return self.model

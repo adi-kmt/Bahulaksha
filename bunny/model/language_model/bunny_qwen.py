@@ -23,6 +23,7 @@ class BunnyQwenForCausalLM(Qwen2ForCausalLM, BunnyMetaForCausalLM):
 	config_class = BunnyQwenConfig
 
 	def __init__(self, config):
+		super(BunnyQwenForCausalLM, self).__init__(config)
 		self.model = BunnyQwenModel(config)
 		self.vocab_size = config.vocab_size
 		self.lm_head = torch.nn.Linear(config.hidden_size, config.vocab_size,

@@ -49,8 +49,10 @@ def main(args):
     # Similar operation in model_worker.py
     image_tensor = process_images([image], image_processor, model.config)
     if type(image_tensor) is list:
+        print(f"Length of image list is {len(image_tensor)}")
         image_tensor = [image.to(model.device, dtype=model.dtype) for image in image_tensor]
     else:
+        print(f"Shape of image tensor is: {image_tensor.shape}")
         image_tensor = image_tensor.to(model.device, dtype=model.dtype)
 
     while True:

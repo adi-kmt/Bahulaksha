@@ -11,7 +11,7 @@ from bunny.model import *
 def load_pretrained_model(model_path, model_base, model_name, model_type,
 						  load_8bit=False, load_4bit=False,
 						  device_map="auto", device="cuda", **kwargs):
-	if model_type not in {'phi-1.5', 'phi-2', 'stablelm-2'}:
+	if model_type not in {'phi-1.5','qwen-2', 'phi-2', 'stablelm-2'}:
 		raise ValueError(f"Unknown Model Type {model_type}")
 
 	kwargs = {"device_map": device_map, **kwargs}
@@ -146,8 +146,8 @@ def load_pretrained_model(model_path, model_base, model_name, model_type,
 														**kwargs)
 		elif model_type == 'qwen-2' or model_type == 'qwen-1.5':
 			# TODO check qwen padding and special tokens
-			tokenizer = AutoTokenizer.from_pretrained(model_base, use_fast=True)
-			model = BunnyQwenForCausalLM.from_pretrained(model_base,
+			tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=True)
+			model = BunnyQwenForCausalLM.from_pretrained(model_path,
 														 low_cpu_mem_usage=True,
 														 **kwargs)
 		elif model_type == 'stablelm-2':

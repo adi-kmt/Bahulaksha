@@ -49,8 +49,8 @@ class BunnyQwenForCausalLM(Qwen2ForCausalLM, BunnyMetaForCausalLM):
 			images: Optional[torch.FloatTensor] = None,
 			return_dict: Optional[bool] = None,
 	) -> Union[Tuple, CausalLMOutputWithPast]:
-
 		if inputs_embeds is None:
+			print("Input embeds is none")
 			(
 				input_ids,
 				position_ids,
@@ -66,7 +66,6 @@ class BunnyQwenForCausalLM(Qwen2ForCausalLM, BunnyMetaForCausalLM):
 				labels,
 				images
 			)
-
 		return super().forward(
 			input_ids=input_ids,
 			attention_mask=attention_mask,
@@ -92,7 +91,10 @@ class BunnyQwenForCausalLM(Qwen2ForCausalLM, BunnyMetaForCausalLM):
 		)
 
 		if images is not None:
+			print("Images is not none")
 			_inputs['images'] = images
+		else:
+			print("Images is none")
 		return _inputs
 
 

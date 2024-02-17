@@ -146,7 +146,7 @@ def load_pretrained_model(model_path, model_base, model_name, model_type,
 														**kwargs)
 		elif model_type == 'qwen-2' or model_type == 'qwen-1.5':
 			# TODO check qwen padding and special tokens
-			tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=True)
+			tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=True, pad_token='<|endoftext|>')
 			model = BunnyQwenForCausalLM.from_pretrained(model_path,
 														 low_cpu_mem_usage=True,
 														 **kwargs)

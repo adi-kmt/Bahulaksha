@@ -67,8 +67,11 @@ class BunnyMetaForCausalLM(ABC):
         return self.get_model().get_vision_tower()
 
     def encode_images(self, images):
+        print(f"Image len is {images.shape}")
         image_features = self.get_model().get_vision_tower()(images)
+        print(f"Image len is {image_features.shape}")
         image_features = self.get_model().mm_projector(image_features)
+        print(f"Image len is {image_features.shape}")
         return image_features
 
     def prepare_inputs_labels_for_multimodal(

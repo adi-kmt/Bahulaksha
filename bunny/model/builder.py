@@ -11,7 +11,7 @@ from bunny.model import *
 def load_pretrained_model(model_path, model_base, model_name, model_type,
 						  load_8bit=False, load_4bit=False,
 						  device_map="auto", device="cuda", **kwargs):
-	if model_type not in {'phi-1.5','qwen-2', 'phi-2', 'stablelm-2'}:
+	if model_type not in {'phi-1.5','qwen-2', 'phi-2', 'stablelm-2', 'gemma'}:
 		raise ValueError(f"Unknown Model Type {model_type}")
 
 	kwargs = {"device_map": device_map, **kwargs}
@@ -57,6 +57,13 @@ def load_pretrained_model(model_path, model_base, model_name, model_type,
 														 low_cpu_mem_usage=True,
 														 config=lora_cfg_pretrained,
 														 **kwargs)
+		elif model_type == 'gemma':
+			tokenizer = AutoTokenizer.from_pretrained(model_base, use_fast=True)
+			model = BunnyGemmaForCausalLM.from_pretrained(model_base,
+														  low_cpu_mem_usage=True,
+														  config=lora_cfg_pretrained,
+														 **kwargs)
+
 		elif model_type == 'stablelm-2':
 			tokenizer = AutoTokenizer.from_pretrained(model_base, use_fast=True,
 													  trust_remote_code=True)
@@ -125,6 +132,14 @@ def load_pretrained_model(model_path, model_base, model_name, model_type,
 														 low_cpu_mem_usage=True,
 														 config=cfg_pretrained,
 														 **kwargs)
+		elif model_type == 'gemma':
+			# TODO check qwen padding and special tokens
+			tokenizer = AutoTokenizer.from_pretrained(model_base, use_fast=True)
+			model = BunnyGemmaForCausalLM.from_pretrained(model_base,
+														 low_cpu_mem_usage=True,
+														 config=cfg_pretrained,
+														 **kwargs)												 
+		
 		elif model_type == 'stablelm-2':
 			tokenizer = AutoTokenizer.from_pretrained(model_base, use_fast=True,
 													  trust_remote_code=True)
@@ -150,6 +165,13 @@ def load_pretrained_model(model_path, model_base, model_name, model_type,
 			model = BunnyQwenForCausalLM.from_pretrained(model_path,
 														 low_cpu_mem_usage=True,
 														 **kwargs)
+		elif model_type == 'gemma':
+			# TODO check qwen padding and special tokens
+			tokenizer = AutoTokenizer.from_pretrained(model_base, use_fast=True)
+			model = BunnyGemmaForCausalLM.from_pretrained(model_base,
+														 low_cpu_mem_usage=True,
+														 config=cfg_pretrained,
+														 **kwargs)											
 		elif model_type == 'stablelm-2':
 			tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=True,
 													  trust_remote_code=True)

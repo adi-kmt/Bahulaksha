@@ -1,7 +1,7 @@
 import torch
 from typing import Optional, Union, Tuple, List
 from transformers import (
-	Qwen2Config, Qwen2ForCausalLM, Qwen2Model, AutoConfig, AutoModelForCausalLM)
+	GemmaConfig, GemmaForCausalLM, GemmaModel, AutoConfig, AutoModelForCausalLM)
 from transformers.modeling_outputs import CausalLMOutputWithPast
 
 from bunny.model.bunny_arch import BunnyMetaModel, BunnyMetaForCausalLM
@@ -11,19 +11,19 @@ class BunnyQwenConfig(AutoConfig):
 	model_type = "bunny-gemma"
 
 
-class BunnyQwenModel(BunnyMetaModel, AutoModel):
+class BunnyQwenModel(BunnyMetaModel, GemmaModel:
 	config_class = BunnyGemmaConfig
 
 	def __init__(self, config: AutoConfig):
 		super(BunnyQwenModel, self).__init__(config)
 
 
-class BunnyQwenForCausalLM(Qwen2ForCausalLM, BunnyMetaForCausalLM):
-	config_class = BunnyQwenConfig
+class BunnyGemmaForCausalLM(GemmaForCausalLM, BunnyMetaForCausalLM):
+	config_class = BunnyGemmaConfig
 
 	def __init__(self, config):
-		super(BunnyQwenForCausalLM, self).__init__(config)
-		self.model = BunnyQwenModel(config)
+		super(BunnyGemmaForCausalLM, self).__init__(config)
+		self.model = BunnyGemmaModel(config)
 		self.vocab_size = config.vocab_size
 		self.lm_head = torch.nn.Linear(config.hidden_size, config.vocab_size,
 									bias=False)
@@ -97,5 +97,5 @@ class BunnyQwenForCausalLM(Qwen2ForCausalLM, BunnyMetaForCausalLM):
 		return _inputs
 
 
-AutoConfig.register("bunny-qwen", BunnyQwenConfig)
-AutoModelForCausalLM.register(BunnyQwenConfig, BunnyQwenForCausalLM)
+AutoConfig.register("gemma-qwen", BunnyQwenConfig)
+AutoModelForCausalLM.register(BunnyGemmaConfig, BunnyGemmaForCausalLM)

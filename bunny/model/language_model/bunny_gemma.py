@@ -11,7 +11,7 @@ class BunnyQwenConfig(AutoConfig):
 	model_type = "bunny-gemma"
 
 
-class BunnyQwenModel(BunnyMetaModel, GemmaModel:
+class BunnyQwenModel(BunnyMetaModel, GemmaModel):
 	config_class = BunnyGemmaConfig
 
 	def __init__(self, config: AutoConfig):
@@ -20,6 +20,9 @@ class BunnyQwenModel(BunnyMetaModel, GemmaModel:
 
 class BunnyGemmaForCausalLM(GemmaForCausalLM, BunnyMetaForCausalLM):
 	config_class = BunnyGemmaConfig
+
+	def __init__(self):
+			pass
 
 	def __init__(self, config):
 		super(BunnyGemmaForCausalLM, self).__init__(config)

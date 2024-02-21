@@ -135,6 +135,7 @@ def load_pretrained_model(model_path, model_base, model_name, model_type,
 		elif model_type == 'gemma':
 			# TODO check qwen padding and special tokens
 			tokenizer = AutoTokenizer.from_pretrained(model_base, use_fast=True)
+			tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=True, pad_token='<|endoftext|>')
 			model = BunnyGemmaForCausalLM.from_pretrained(model_base,
 														 low_cpu_mem_usage=True,
 														 config=cfg_pretrained,
@@ -165,8 +166,8 @@ def load_pretrained_model(model_path, model_base, model_name, model_type,
 			model = BunnyQwenForCausalLM.from_pretrained(model_path,
 														 low_cpu_mem_usage=True,
 														 **kwargs)
-		elif model_type == 'gemma':
-			# TODO check qwen padding and special tokens
+		elif model_type == 'gemma':	
+							# TODO check qwen padding and special tokens
 			tokenizer = AutoTokenizer.from_pretrained(model_base, use_fast=True)
 			model = BunnyGemmaForCausalLM.from_pretrained(model_base,
 														 low_cpu_mem_usage=True,
@@ -174,7 +175,7 @@ def load_pretrained_model(model_path, model_base, model_name, model_type,
 														 **kwargs)											
 		elif model_type == 'stablelm-2':
 			tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=True,
-													  trust_remote_code=True)
+													trust_remote_code=True)
 			model = BunnyStableLMForCausalLM.from_pretrained(model_path,
 															 low_cpu_mem_usage=True,
 															 **kwargs)
@@ -191,6 +192,18 @@ def load_pretrained_model(model_path, model_base, model_name, model_type,
 		context_len = model.config.max_sequence_length
 	else:
 		context_len = 2048
+	if model_type == 'gemma':
+			token_ids = ["bos_token_id", "eos_token_id", "pad_token_id",
+					"unk_token_id"]
+			for attr_name in token_ids:
+				if getattr(tokenizer, attr_name) is None:
+					setattr(tokenizer, attr_name, tokenizer.eod_id)
+
+			token_names = ["bos_token", "eos_token", "pad_token", "unk_token"]
+			for attr_name in token_names:
+				if getattr(tokenizer, attr_name) is None:
+					setattr(tokenizer, attr_name, "<|endoftext|>")
+
 
 	if model.config.pad_token_id is None:
 		model.config.pad_token_id = model.config.eos_token_id

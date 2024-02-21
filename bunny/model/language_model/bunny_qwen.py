@@ -1,21 +1,19 @@
 import torch
 from typing import Optional, Union, Tuple, List
-from transformers import (
-	Qwen2Config, Qwen2ForCausalLM, Qwen2Model, AutoConfig, AutoModelForCausalLM)
-
+from transformers import AutoTokenizer, AutoModelForCausalLM, AutoConfig, AutoModel
 from transformers.modeling_outputs import CausalLMOutputWithPast
 
 from bunny.model.bunny_arch import BunnyMetaModel, BunnyMetaForCausalLM
 
 
-class BunnyQwenConfig(Qwen2Config):
-	model_type = "bunny-qwen"
+class BunnyQwenConfig(AutoConfig):
+	model_type = "bunny-gemma"
 
 
-class BunnyQwenModel(BunnyMetaModel, Qwen2Model):
-	config_class = BunnyQwenConfig
+class BunnyQwenModel(BunnyMetaModel, AutoModel):
+	config_class = BunnyGemmaConfig
 
-	def __init__(self, config: Qwen2Config):
+	def __init__(self, config: AutoConfig):
 		super(BunnyQwenModel, self).__init__(config)
 
 

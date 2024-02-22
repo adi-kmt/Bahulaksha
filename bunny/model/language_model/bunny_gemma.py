@@ -7,15 +7,15 @@ from transformers.modeling_outputs import CausalLMOutputWithPast
 from bunny.model.bunny_arch import BunnyMetaModel, BunnyMetaForCausalLM
 
 
-class BunnyQwenConfig(AutoConfig):
+class BunnyGemmaConfig(AutoConfig):
 	model_type = "bunny-gemma"
 
 
-class BunnyQwenModel(BunnyMetaModel, GemmaModel):
+class BunnyGemmaModel(BunnyMetaModel, GemmaModel):
 	config_class = BunnyGemmaConfig
 
 	def __init__(self, config: AutoConfig):
-		super(BunnyQwenModel, self).__init__(config)
+		super(BunnyGemmaModel, self).__init__(config)
 
 
 class BunnyGemmaForCausalLM(GemmaForCausalLM, BunnyMetaForCausalLM):
@@ -100,5 +100,5 @@ class BunnyGemmaForCausalLM(GemmaForCausalLM, BunnyMetaForCausalLM):
 		return _inputs
 
 
-AutoConfig.register("gemma-qwen", BunnyQwenConfig)
+AutoConfig.register("bunny-gemma", BunnyGemmaConfig)
 AutoModelForCausalLM.register(BunnyGemmaConfig, BunnyGemmaForCausalLM)

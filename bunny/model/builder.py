@@ -135,7 +135,6 @@ def load_pretrained_model(model_path, model_base, model_name, model_type,
 		elif model_type == 'gemma':
 			# TODO check qwen padding and special tokens
 			tokenizer = AutoTokenizer.from_pretrained(model_base, use_fast=True)
-			tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=True, pad_token='<|endoftext|>')
 			model = BunnyGemmaForCausalLM.from_pretrained(model_base,
 														low_cpu_mem_usage=True,
 														config=cfg_pretrained,

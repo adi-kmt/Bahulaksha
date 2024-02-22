@@ -286,6 +286,14 @@ def train():
 			eos_token_id=tokenizer.eos_token_id,
 			**bnb_model_from_pretrained_args
 		)
+	elif model_args.model_type == 'gemma' or model_args.model_type == 'gemma':
+		model = BunnyQwenForCausalLM.from_pretrained(
+			model_args.model_name_or_path,
+			cache_dir=training_args.cache_dir,
+			bos_token_id=tokenizer.bos_token_id,
+			eos_token_id=tokenizer.eos_token_id,
+			**bnb_model_from_pretrained_args
+		)
 	else:
 		raise ValueError(f"Unknown Model Type {model_args.model_type}")
 

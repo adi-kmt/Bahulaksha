@@ -21,9 +21,6 @@ class BunnyGemmaModel(BunnyMetaModel, GemmaModel):
 class BunnyGemmaForCausalLM(GemmaForCausalLM, BunnyMetaForCausalLM):
 	config_class = BunnyGemmaConfig
 
-	def __init__(self):
-			pass
-
 	def __init__(self, config):
 		super(BunnyGemmaForCausalLM, self).__init__(config)
 		self.model = BunnyGemmaModel(config)

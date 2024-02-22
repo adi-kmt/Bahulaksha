@@ -287,7 +287,7 @@ def train():
 			**bnb_model_from_pretrained_args
 		)
 	elif model_args.model_type == 'gemma' or model_args.model_type == 'gemma':
-		model = BunnyQwenForCausalLM.from_pretrained(
+		model = BunnyGemmaForCausalLM.from_pretrained(
 			model_args.model_name_or_path,
 			cache_dir=training_args.cache_dir,
 			bos_token_id=tokenizer.bos_token_id,

@@ -68,8 +68,8 @@ def load_pretrained_model(model_path, model_base, model_name, model_type,
 			tokenizer = AutoTokenizer.from_pretrained(model_base, use_fast=True,
 													  trust_remote_code=True)
 			model = BunnyStableLMForCausalLM.from_pretrained(model_base,
-															 low_cpu_mem_usage=True,
-															 config=lora_cfg_pretrained,
+															low_cpu_mem_usage=True,
+															config=lora_cfg_pretrained,
 															 **kwargs)
 
 		token_num, tokem_dim = model.lm_head.out_features, model.lm_head.in_features
@@ -97,15 +97,15 @@ def load_pretrained_model(model_path, model_base, model_name, model_type,
 				return torch.load(cache_file, map_location='cpu')
 
 			non_lora_trainables = load_from_hf(model_path,
-											   'non_lora_trainables.bin')
+											'non_lora_trainables.bin')
 
 		non_lora_trainables = {(k[11:] if k.startswith('base_model.') else k): v
-							   for k, v in
-							   non_lora_trainables.items()}
+							for k, v in
+							non_lora_trainables.items()}
 		if any(k.startswith('model.model.') for k in non_lora_trainables):
 			non_lora_trainables = {(k[6:] if k.startswith('model.') else k): v
-								   for k, v in
-								   non_lora_trainables.items()}
+								for k, v in
+								non_lora_trainables.items()}
 		model.load_state_dict(non_lora_trainables, strict=False)
 
 		from peft import PeftModel
@@ -129,24 +129,24 @@ def load_pretrained_model(model_path, model_base, model_name, model_type,
 			# TODO check qwen padding and special tokens
 			tokenizer = AutoTokenizer.from_pretrained(model_base, use_fast=True)
 			model = BunnyQwenForCausalLM.from_pretrained(model_base,
-														 low_cpu_mem_usage=True,
-														 config=cfg_pretrained,
+														low_cpu_mem_usage=True,
+														config=cfg_pretrained,
 														 **kwargs)
 		elif model_type == 'gemma':
 			# TODO check qwen padding and special tokens
 			tokenizer = AutoTokenizer.from_pretrained(model_base, use_fast=True)
 			tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=True, pad_token='<|endoftext|>')
 			model = BunnyGemmaForCausalLM.from_pretrained(model_base,
-														 low_cpu_mem_usage=True,
-														 config=cfg_pretrained,
+														low_cpu_mem_usage=True,
+														config=cfg_pretrained,
 														 **kwargs)												 
 		
 		elif model_type == 'stablelm-2':
 			tokenizer = AutoTokenizer.from_pretrained(model_base, use_fast=True,
-													  trust_remote_code=True)
+													trust_remote_code=True)
 			model = BunnyStableLMForCausalLM.from_pretrained(model_base,
-															 low_cpu_mem_usage=True,
-															 config=cfg_pretrained,
+															low_cpu_mem_usage=True,
+															config=cfg_pretrained,
 															 **kwargs)
 
 		mm_projector_weights = torch.load(
@@ -164,7 +164,7 @@ def load_pretrained_model(model_path, model_base, model_name, model_type,
 			# TODO check qwen padding and special tokens
 			tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=True, pad_token='<|endoftext|>')
 			model = BunnyQwenForCausalLM.from_pretrained(model_path,
-														 low_cpu_mem_usage=True,
+														low_cpu_mem_usage=True,
 														 **kwargs)
 		elif model_type == 'gemma':	
 							# TODO check qwen padding and special tokens
@@ -192,18 +192,6 @@ def load_pretrained_model(model_path, model_base, model_name, model_type,
 		context_len = model.config.max_sequence_length
 	else:
 		context_len = 2048
-	if model_type == 'gemma':
-			token_ids = ["bos_token_id", "eos_token_id", "pad_token_id",
-					"unk_token_id"]
-			for attr_name in token_ids:
-				if getattr(tokenizer, attr_name) is None:
-					setattr(tokenizer, attr_name, tokenizer.eod_id)
-
-			token_names = ["bos_token", "eos_token", "pad_token", "unk_token"]
-			for attr_name in token_names:
-				if getattr(tokenizer, attr_name) is None:
-					setattr(tokenizer, attr_name, "<|endoftext|>")
-
 
 	if model.config.pad_token_id is None:
 		model.config.pad_token_id = model.config.eos_token_id

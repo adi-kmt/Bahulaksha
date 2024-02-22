@@ -1,20 +1,20 @@
 import torch
 from typing import Optional, Union, Tuple, List
-from transformers import (
-	GemmaConfig, GemmaForCausalLM, GemmaModel, AutoConfig, AutoModelForCausalLM)
+from .gemma import GemmaModel, GemmaConfig, GemmaForCausalLM
+
 from transformers.modeling_outputs import CausalLMOutputWithPast
 
 from bunny.model.bunny_arch import BunnyMetaModel, BunnyMetaForCausalLM
 
 
-class BunnyGemmaConfig(AutoConfig):
+class BunnyGemmaConfig(GemmaConfig):
 	model_type = "bunny-gemma"
 
 
 class BunnyGemmaModel(BunnyMetaModel, GemmaModel):
 	config_class = BunnyGemmaConfig
 
-	def __init__(self, config: AutoConfig):
+	def __init__(self, config: GemmaConfig):
 		super(BunnyGemmaModel, self).__init__(config)
 
 
